@@ -1,0 +1,28 @@
+<div class="row vh-100 d-flex justify-content-center align-items-center">
+    <div class="col-10 col-sm-8 col-md-6 col-lg-3 rounded-3 shadow-lg p-3 p-md-5 bg-body-tertiary">
+        <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="form-signin">
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <div class="form-floating my-3">
+                <input type="email" class="form-control" id="floatingEmail" placeholder="name@example.com" required formControlName="email" (blur)="onEmailBlur()">
+                <label for="floatingEmail">Endereço de  email</label>
+            </div>
+            <small id="resEmail" class="text-danger ">{{ getEmailError() }}</small>
+            <div class="form-floating my-3">
+                <input type="password" class="form-control" id="floatingSenha" placeholder="Senha" required formControlName="senha" (blur)="onSenhaBlur()">
+                <label for="floatingSenha">Senha</label>
+            </div>
+            <small id="resSenha" class="text-danger">{{ getSenhaError() }}</small>
+            <div class="form-check d-flex justify-content-end gap-2 my-3 ">
+                <input class="form-check-input justify-content-end" type="checkbox" id="checkDefault" formControlName="lembrarMe">
+                <label class="form-check-label d-block" for="checkDefault">
+                    Relembrar-me
+                </label>
+            </div>
+            <button class="btn btn-primary w-100 py-2" type="submit">
+                <span class="spinner-border spinner-border-sm d-none" id="loadIcon"></span>
+                Entrar
+            </button>
+            <p class="mt-5 mb-3 text-body-secondary">© 2017–2025</p>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h4><i class="fas fa-clinic-medical"></i> Clínica XPTO</h4>
+    </div>
+    <div class="sidebar-menu">
+        <div class="menu-section">
+            <div class="menu-section-title">Menu Principal</div>
+            @for (li of menuItems1; track $index) {
+                <a [routerLink]="li.urlLink" class="menu-item">
+                    <i [class]="li.urlIcon"></i> 
+                    {{li.urlNome}}
+                </a>
+            }
+        </div>
+        <div class="menu-section">
+            <div class="menu-section-title">Gestão</div>
+            @for (li of menuItems2; track $index) {
+                <a [routerLink]="li.urlLink" class="menu-item">
+                    <i [class]="li.urlIcon"></i> 
+                    {{li.urlNome}}
+                </a>
+            }
+        </div>
+        <div class="menu-section">
+            <div class="menu-section-title">Configurações</div>
+            @for (li of menuItems3; track $index) {
+                <a [routerLink]="li.urlLink" class="menu-item">
+                    <i [class]="li.urlIcon"></i> 
+                    {{li.urlNome}}
+                </a>
+            }
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>
