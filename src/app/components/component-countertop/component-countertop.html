@@ -1,0 +1,8 @@
+<div class="stats-cards">
+  @for (item of items;let i = $index; track $index) {
+    <div class="stat-card">
+      <h3 [class]="item.classe">{{ item.valor }} {{(i === items.length - 1 ) ? "%": ""}}</h3>
+      <p>{{ item.texto }}</p>
+    </div>
+  }
+</div>

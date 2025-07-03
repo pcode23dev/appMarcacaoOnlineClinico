@@ -1,0 +1,33 @@
+<div class="filters-card">
+    <h5 class="mb-3">Filtros de Pesquisa</h5>
+    <div class="row">
+        <div class="col-md-3">
+            <label class="form-label">Tipo de Ato</label>
+            <select class="form-select filter-select" id="filterType">
+                @for (item of tipoAtos; track $index) {
+                <option [value]="item.value">{{ item.label }}</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Especialidade</label>
+            <select class="form-select filter-select" id="filterSpecialty">
+                @for (item of especialidades; track $index) {
+                <option [value]="item.value">{{ item.label }}</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Estado</label>
+            <select class="form-select filter-select" id="filterStatus">
+                @for (item of estados; track $index) {
+                <option [value]="item.value">{{ item.label }}</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Data</label>
+            <input type="date" class="form-control filter-select" id="filterDate">
+        </div>
+    </div>
+</div>
