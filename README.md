@@ -1,59 +1,77 @@
-# AppMarcacaoOnlineClinico
+# 🏥 Clínica XPTO - Sistema de Marcação Online
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.5.
+Sistema completo de marcação de consultas e exames médicos desenvolvido em Angular 20 com JSON Server.
 
-## Development server
-
-To start a local development server, run:
+## 🚀 Execução Rápida
 
 ```bash
-ng serve
+# Instalar dependências
+npm install
+
+# Executar API + Angular (simultaneamente)
+npm run start:all
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+**Acessos:**
+- 🌐 **Frontend**: http://localhost:4200
+- 🔌 **API**: http://localhost:3000
 
-## Code scaffolding
+## 🔑 Credenciais de Teste
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+| Tipo | Email | Senha | Função |
+|------|-------|-------|---------|
+| **Utente** | joao.silva@email.com | 123456 | Dashboard + Histórico |
+| **Admin** | admin@clinicaxpto.pt | admin123 | Gestão de Pedidos |
+| **Super Admin** | superadmin@clinicaxpto.pt | superadmin123 | Gestão de Utilizadores |
 
-```bash
-ng generate component component-name
-```
+## ✨ Funcionalidades
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Para Utentes Anónimos
+- ✅ Marcação de consultas sem registo
+- ✅ Formulário completo com upload de foto
+- ✅ Carrinho de atos clínicos
+- ✅ Preferências de data/horário
 
-```bash
-ng generate --help
-```
+### Para Utentes Registados  
+- ✅ Login seguro com JWT
+- ✅ Histórico de marcações
+- ✅ Exportação PDF
+- ✅ Edição de dados pessoais
 
-## Building
+### Para Administrativos
+- ✅ Dashboard de gestão
+- ✅ Aprovação de pedidos (PEDIDO → AGENDADO → REALIZADO)
+- ✅ Simulação de envio de emails
+- ✅ Agendamento de consultas
 
-To build the project run:
+### Para Administradores
+- ✅ Criação/edição de utilizadores
+- ✅ Gestão de roles e permissões
+- ✅ Acesso completo ao sistema
 
-```bash
-ng build
-```
+## 🎯 Fluxo Principal
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+1. **Página Inicial** → Informações da clínica
+2. **Marcação Anónima** → Formulário completo
+3. **Login** → Acesso a área restrita
+4. **Dashboard** → Gestão baseada no role
+5. **Aprovação** → Workflow administrativo
 
-## Running unit tests
+## 🛠️ Tecnologias
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- **Angular 20** - Framework
+- **Bootstrap 5** - UI/CSS
+- **JSON Server** - API simulada  
+- **jsPDF** - Exportação PDF
+- **RxJS** - Programação reativa
 
-```bash
-ng test
-```
+## 📱 Características
 
-## Running end-to-end tests
+- 📱 **Responsivo** - Mobile-first design
+- 🔒 **Seguro** - Guards e validações
+- 🎨 **Moderno** - Interface limpa e intuitiva
+- ⚡ **Performante** - Otimizado para velocidade
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**📋 Veja `SISTEMA_MARCACAO_CLINICA_XPTO.md` para documentação completa**
