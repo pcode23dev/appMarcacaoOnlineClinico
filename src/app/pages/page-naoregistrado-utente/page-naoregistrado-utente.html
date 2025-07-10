@@ -1,0 +1,390 @@
+<!-- unregistered-user.component.html -->
+<div class="container-fluid p-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <!-- Cabeçalho -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-calendar-plus me-2"></i>
+                        Pedido de Marcação de Consulta
+                    </h3>
+                    <small class="text-light">Preencha o formulário para solicitar a sua marcação</small>
+                </div>
+            </div>
+
+            <!-- Mensagens de Estado -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    @if (mensagemErro) {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        {{ mensagemErro }}
+                        <button type="button" class="btn-close" (click)="limparMensagens()"></button>
+                    </div>
+                    }
+
+                    @if (mostrarSucesso) {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Pedido enviado com sucesso!</strong>
+                        Entraremos em contacto consigo nas próximas 24 horas para confirmar a marcação.
+                        <button type="button" class="btn-close" (click)="limparMensagens()"></button>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <form [formGroup]="formularioPrincipal" (ngSubmit)="submeterPedido()">
+                <div class="row">
+                    <div class="col-12 col-lg-8">
+                        <!-- Secção 1: Dados Pessoais -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-user me-2"></i>
+                                    1. Dados Pessoais
+                                </h5>
+                            </div>
+                            <div class="card-body" formGroupName="dadosPessoais">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="numeroUtente" class="form-label">
+                                            Número de Utente <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="numeroUtente"
+                                            formControlName="numeroUtente" placeholder="123456789">
+                                        @if (campoInvalido('numeroUtente')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('numeroUtente') }}
+                                        </div>
+                                        }
+
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="nomeCompleto" class="form-label">
+                                            Nome Completo <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="nomeCompleto"
+                                            formControlName="nomeCompleto" placeholder="João Silva Santos">
+                                        @if (campoInvalido('nomeCompleto')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('nomeCompleto') }}
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="dataNascimento" class="form-label">
+                                            Data de Nascimento <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" class="form-control" id="dataNascimento"
+                                            formControlName="dataNascimento">
+                                        @if (campoInvalido('dataNascimento')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('dataNascimento') }}
+                                        </div>
+                                        }
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="genero" class="form-label">
+                                            Género <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select" id="genero" formControlName="genero">
+                                            <option value="">Selecione...</option>
+                                            @for (genero of generos; track genero.value) {
+                                            <option [value]="genero.value">
+                                                {{ genero.label }}
+                                            </option>
+                                            }
+                                        </select>
+                                        @if (campoInvalido('genero')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('genero') }}
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="telemovel" class="form-label">
+                                            Telemóvel <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="tel" class="form-control" id="telemovel"
+                                            formControlName="telemovel" placeholder="912345678">
+                                        @if (campoInvalido('telemovel')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('telemovel') }}
+                                        </div>
+                                        }
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">
+                                            Email <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="email" class="form-control" id="email" formControlName="email"
+                                            placeholder="joao.silva@email.com">
+                                        @if (campoInvalido('email')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('email') }}
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-8 mb-3">
+                                        <label for="morada" class="form-label">
+                                            Morada <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="morada" formControlName="morada"
+                                            placeholder="Rua das Flores, 123, 4º Esq, 1200-123 Lisboa">
+                                        @if (campoInvalido('morada')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('morada') }}
+                                        </div>
+                                        }
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label for="fotografia" class="form-label">
+                                            Fotografia <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="file" class="form-control" id="fotografia" accept="image/*"
+                                            (change)="onFileSelected($event)">
+                                        @if (campoInvalido('fotografia')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('fotografia') }}
+                                        </div>
+                                        }
+                                        <small class="form-text text-muted">JPG, PNG (máx. 5MB)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Secção 2: Adicionar Atos Clínicos -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-stethoscope me-2"></i>
+                                    2. Adicionar Atos Clínicos
+                                </h5>
+                            </div>
+                            <div class="card-body" formGroupName="novoAtoClinico">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="categoriaAto" class="form-label">
+                                            Categoria <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select" id="categoriaAto" formControlName="categoriaAto">
+                                            <option value="">Selecione...</option>
+                                            <option value="consulta">Consulta</option>
+                                            <option value="exame">Exame</option>
+                                        </select>
+                                        @if (campoInvalido('categoriaAto', 'novoAtoClinico')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('categoriaAto', 'novoAtoClinico') }}
+                                        </div>
+                                        }
+
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="tipoAto" class="form-label">
+                                            Tipo <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select" id="tipoAto" formControlName="tipoAto"
+                                            [disabled]="!novoAtoClinico.get('categoriaAto')?.value">
+                                            <option value="">Selecione...</option>
+                                            @for (opcao of getOpcoesAto(); track opcao.value) {
+                                            <option [value]="opcao.value">
+                                                {{ opcao.label }}
+                                            </option>
+                                            }
+
+                                        </select>
+                                        @if (campoInvalido('tipoAto', 'novoAtoClinico')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('tipoAto', 'novoAtoClinico') }}
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="subSistema" class="form-label">
+                                            Sub-Sistema de Saúde <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select" id="subSistema" formControlName="subSistema">
+                                            <option value="">Selecione...</option>
+                                            @for (sistema of subSistemasSaude; track sistema.value) {
+                                            <option [value]="sistema.value">
+                                                {{ sistema.label }}
+                                            </option>
+                                            }
+                                        </select>
+                                        @if (campoInvalido('subSistema', 'novoAtoClinico')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('subSistema', 'novoAtoClinico') }}
+                                        </div>
+                                        }
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label for="observacoesAto" class="form-label">
+                                            Observações (Opcional)
+                                        </label>
+                                        <textarea class="form-control" id="observacoesAto" formControlName="observacoes"
+                                            rows="2"
+                                            placeholder="Informações adicionais sobre este ato clínico..."></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-outline-primary"
+                                            (click)="adicionarAtoClinico()" [disabled]="!novoAtoClinico.valid">
+                                            <i class="fas fa-plus me-2"></i>
+                                            Adicionar ao Carrinho
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Secção 3: Preferências de Agendamento -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-calendar-alt me-2"></i>
+                                    3. Preferências de Agendamento
+                                </h5>
+                            </div>
+                            <div class="card-body" formGroupName="preferencias">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="dataInicio" class="form-label">
+                                            Data de Início Pretendida <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" class="form-control" id="dataInicio"
+                                            formControlName="dataInicio">
+                                        @if (campoInvalido('dataInicio', 'preferencias')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('dataInicio', 'preferencias') }}
+                                        </div>
+                                        }
+
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="dataFim" class="form-label">
+                                            Data de Fim Pretendida <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" class="form-control" id="dataFim" formControlName="dataFim">
+                                        @if (campoInvalido('dataFim', 'preferencias')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('dataFim', 'preferencias') }}
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="horarioPreferencial" class="form-label">Horário Preferencial <span
+                                                class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select" id="horarioPreferencial"
+                                            formControlName="horarioPreferencial">
+                                            <option value="">Selecione...</option>
+                                            @for (horario of horariosPreferenciais; track horario.value) {
+                                            <option [value]="horario.value">
+                                                {{ horario.label }}
+                                            </option>
+                                            }
+
+                                        </select>
+                                        @if (campoInvalido('horarioPreferencial', 'preferencias')) {
+                                        <div class="invalid-feedback">
+                                            {{ obterMensagemErro('horarioPreferencial', 'preferencias') }}
+                                        </div>
+                                        }
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="observacoesPref" class="form-label">
+                                            Observações (Opcional)
+                                        </label>
+                                        <textarea class="form-control" id="observacoesPref"
+                                            formControlName="observacoes" rows="2"
+                                            placeholder="Alguma preferência ou nota adicional..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Botão Submeter -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg" [disabled]="isLoading">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Submeter Pedido
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Lateral - Carrinho de Atos -->
+                    <div class="col-12 col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-clipboard-list me-2"></i>
+                                    Atos Clínicos Selecionados
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                @if (carrinhoAtosClinico.length === 0) {
+                                <div class="text-muted">
+                                    Nenhum ato clínico adicionado ainda.
+                                </div>
+                                }
+
+                                @if (carrinhoAtosClinico.length > 0) {
+                                <ul class="list-group">
+                                    @for (ato of carrinhoAtosClinico; track ato.id) {
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">{{ ato.tipo }}</div>
+                                            <small>{{ ato.subSistema }}</small><br>
+                                            @if (ato.observacoes) {
+                                            <small>Obs: {{ ato.observacoes }}</small>
+                                            }
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            (click)="removerAtoClinico(ato.id)">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </li>
+                                    }
+                                </ul>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
