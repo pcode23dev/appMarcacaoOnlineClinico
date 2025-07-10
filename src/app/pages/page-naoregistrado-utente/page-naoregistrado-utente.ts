@@ -1,31 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
-// Interfaces para tipagem
-interface AtoClinico {
-  id: string;
-  tipo: string;
-  subSistema: string;
-  observacoes?: string;
-}
-
-interface PreferenciasAgendamento {
-  dataInicio: Date;
-  dataFim: Date;
-  horarioPreferencial: string;
-  observacoes?: string;
-}
-
-interface PedidoMarcacao {
-  dadosPessoais: any;
-  atosClinico: AtoClinico[];
-  preferencias: PreferenciasAgendamento;
-}
+import { CommonModule } from '@angular/common';
+import { MarcacaoService } from '../../services/marcacao.service';
+import { UtenteService } from '../../services/utente.service';
+import { AtoClinico, AtoClinicoDisponivel, PedidoMarcacao, Utente } from '../../models';
 
 @Component({
   selector: 'app-page-naoregistrado-utente',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './page-naoregistrado-utente.html',
   styleUrl: './page-naoregistrado-utente.css'
 })
@@ -35,58 +18,30 @@ export class PageNaoregistradoUtente implements OnInit {
   // Formulário principal
   formularioPrincipal: FormGroup;
   
-  // Carrinho de atos clínicos
-  carrinhoAtosClinico: AtoClinico[] = [];
+  // Carrinho de atos clínicos com ID temporário
+  carrinhoAtosClinico: (AtoClinico & { id: string })[] = [];
   
   // Estados da aplicação
   isLoading = false;
   mostrarSucesso = false;
   mensagemErro = '';
   
-  // Dados para dropdowns
-  tiposConsulta = [
-    { value: 'medicina-geral', label: 'Medicina Geral' },
-    { value: 'cardiologia', label: 'Cardiologia' },
-    { value: 'dermatologia', label: 'Dermatologia' },
-    { value: 'ortopedia', label: 'Ortopedia' },
-    { value: 'pediatria', label: 'Pediatria' },
-    { value: 'ginecologia', label: 'Ginecologia' }
-  ];
-
-  tiposExame = [
-    { value: 'analises-sangue', label: 'Análises ao Sangue' },
-    { value: 'radiografia', label: 'Radiografia' },
-    { value: 'ecografia', label: 'Ecografia' },
-    { value: 'mamografia', label: 'Mamografia' },
-    { value: 'tac', label: 'TAC' },
-    { value: 'ressonancia', label: 'Ressonância Magnética' }
-  ];
-
-  subSistemasSaude = [
-    { value: 'sns', label: 'SNS (Serviço Nacional de Saúde)' },
-    { value: 'medis', label: 'Medis' },
-    { value: 'multicare', label: 'Multicare' },
-    { value: 'advance-care', label: 'Advance Care' },
-    { value: 'allianz', label: 'Allianz' },
-    { value: 'particular', label: 'Particular' }
-  ];
-
-  horariosPreferenciais = [
-    { value: 'manha', label: 'Manhã (9h-12h)' },
-    { value: 'tarde', label: 'Tarde (14h-17h)' },
-    { value: 'fim-tarde', label: 'Fim de Tarde (17h-19h)' },
-    { value: 'indiferente', label: 'Indiferente' }
-  ];
+  // Dados carregados da API
+  atosDisponiveis: AtoClinicoDisponivel[] = [];
+  subsistemas: string[] = [];
+  horarios: string[] = [];
 
   generos = [
-    { value: 'masculino', label: 'Masculino' },
-    { value: 'feminino', label: 'Feminino' },
-    { value: 'outro', label: 'Outro' }
+    { value: 'M', label: 'Masculino' },
+    { value: 'F', label: 'Feminino' },
+    { value: 'O', label: 'Outro' }
   ];
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private marcacaoService: MarcacaoService,
+    private utenteService: UtenteService
   ) {
     this.formularioPrincipal = this.fb.group({
       // Dados Pessoais
@@ -103,10 +58,9 @@ export class PageNaoregistradoUtente implements OnInit {
       
       // Ato Clínico (para adicionar ao carrinho)
       novoAtoClinico: this.fb.group({
-        categoriaAto: ['', [Validators.required]],
         tipoAto: ['', [Validators.required]],
         subSistema: ['', [Validators.required]],
-        observacoes: ['']
+        profissional: ['']
       }),
       
       // Preferências de Agendamento
@@ -121,6 +75,22 @@ export class PageNaoregistradoUtente implements OnInit {
 
   ngOnInit(): void {
     this.limparMensagens();
+    this.carregarDadosIniciais();
+  }
+
+  private carregarDadosIniciais(): void {
+    // Carregar dados da API
+    this.marcacaoService.obterAtosClinicosDisponiveis().subscribe(
+      atos => this.atosDisponiveis = atos
+    );
+    
+    this.marcacaoService.obterSubsistemas().subscribe(
+      subsistemas => this.subsistemas = subsistemas
+    );
+    
+    this.marcacaoService.obterHorarios().subscribe(
+      horarios => this.horarios = horarios
+    );
   }
 
   // Getters para facilitar acesso aos form controls
@@ -149,30 +119,31 @@ export class PageNaoregistradoUtente implements OnInit {
     }
   }
 
-  // Obter opções para tipo de ato baseado na categoria
-  getOpcoesAto(): any[] {
-    const categoria = this.novoAtoClinico.get('categoriaAto')?.value;
-    return categoria === 'consulta' ? this.tiposConsulta : this.tiposExame;
+  // Obter opções para tipo de ato
+  getOpcoesAto(): AtoClinicoDisponivel[] {
+    return this.atosDisponiveis;
   }
 
   // Adicionar ato clínico ao carrinho
   adicionarAtoClinico(): void {
     if (this.novoAtoClinico.valid) {
-      const categoria = this.novoAtoClinico.get('categoriaAto')?.value;
       const tipoAto = this.novoAtoClinico.get('tipoAto')?.value;
       const subSistema = this.novoAtoClinico.get('subSistema')?.value;
-      const observacoes = this.novoAtoClinico.get('observacoes')?.value;
+      const profissional = this.novoAtoClinico.get('profissional')?.value || '';
 
-      // Encontrar labels para exibição
-      const opcoes = this.getOpcoesAto();
-      const tipoLabel = opcoes.find(o => o.value === tipoAto)?.label || tipoAto;
-      const subSistemaLabel = this.subSistemasSaude.find(s => s.value === subSistema)?.label || subSistema;
+      // Encontrar ato selecionado
+      const atoDisponivel = this.atosDisponiveis.find(a => a.id.toString() === tipoAto);
+      
+      if (!atoDisponivel) {
+        this.mostrarErro('Ato clínico selecionado não encontrado.');
+        return;
+      }
 
-      const novoAto: AtoClinico = {
+      const novoAto: AtoClinico & { id: string } = {
         id: Date.now().toString(),
-        tipo: `${categoria.toUpperCase()}: ${tipoLabel}`,
-        subSistema: subSistemaLabel,
-        observacoes: observacoes
+        tipo: atoDisponivel.tipo,
+        subSistema: subSistema,
+        profissional: profissional
       };
 
       this.carrinhoAtosClinico.push(novoAto);
@@ -238,31 +209,65 @@ export class PageNaoregistradoUtente implements OnInit {
       return;
     }
 
-    // Simular envio do pedido
+    // Enviar pedido através do serviço
     this.isLoading = true;
     
-    const pedido: PedidoMarcacao = {
-      dadosPessoais: this.dadosPessoais.value,
-      atosClinico: this.carrinhoAtosClinico,
-      preferencias: this.preferencias.value
+    const dadosPessoais = this.dadosPessoais.value;
+    const preferencias = this.preferencias.value;
+    
+    // Converter atos do carrinho para o formato da API
+    const atos: AtoClinico[] = this.carrinhoAtosClinico.map(ato => ({
+      tipo: ato.tipo,
+      subSistema: ato.subSistema,
+      profissional: ato.profissional
+    }));
+
+    const pedido: Omit<PedidoMarcacao, 'id' | 'dataSubmissao' | 'estado'> = {
+      utenteId: 0, // Utente anônimo
+      utenteTempData: {
+        nome: dadosPessoais.nomeCompleto,
+        email: dadosPessoais.email,
+        telefone: dadosPessoais.telemovel,
+        morada: dadosPessoais.morada,
+        dataNascimento: dadosPessoais.dataNascimento,
+        genero: dadosPessoais.genero,
+        numeroUtente: dadosPessoais.numeroUtente,
+        fotografia: '', // TODO: Upload da fotografia
+        role: 'anonimo' as const
+      },
+      atos: atos,
+      intervaloDatas: `${preferencias.dataInicio} a ${preferencias.dataFim}`,
+      horarioPreferido: preferencias.horarioPreferencial,
+      observacoes: preferencias.observacoes || ''
     };
 
-    // Simular chamada à API
-    setTimeout(() => {
-      this.isLoading = false;
-      this.mostrarSucesso = true;
-      
-      // Aqui faria a chamada real à API
-      console.log('Pedido submetido:', pedido);
-      
-      // Limpar formulário após sucesso
-      setTimeout(() => {
-        this.formularioPrincipal.reset();
-        this.carrinhoAtosClinico = [];
-        this.mostrarSucesso = false;
-      }, 5000);
-      
-    }, 2000);
+    this.marcacaoService.criarPedidoMarcacao(pedido).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.mostrarSucesso = true;
+        
+        console.log('Pedido criado com sucesso:', response);
+        
+        // Limpar formulário após sucesso
+        setTimeout(() => {
+          this.formularioPrincipal.reset();
+          this.carrinhoAtosClinico = [];
+          this.mostrarSucesso = false;
+          
+          // Redirecionar para página inicial com mensagem de sucesso
+          this.router.navigate(['/'], { 
+            queryParams: { 
+              message: 'Pedido enviado com sucesso! Será contactado em breve.' 
+            } 
+          });
+        }, 3000);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Erro ao criar pedido:', error);
+        this.mostrarErro('Erro ao enviar pedido. Tente novamente.');
+      }
+    });
   }
 
   // Utilitários para mensagens

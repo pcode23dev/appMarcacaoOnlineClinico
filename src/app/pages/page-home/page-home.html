@@ -1,1 +1,172 @@
-<p>page-home works!</p>
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold text-primary mb-4">
+          Clínica XPTO
+        </h1>
+        <h2 class="h3 text-secondary mb-4">
+          Cuidamos da sua saúde com excelência e dedicação
+        </h2>
+        <p class="lead mb-4">
+          Sistema de marcação de consultas e exames médicos online. 
+          Marque suas consultas de forma rápida e segura.
+        </p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <button 
+            class="btn btn-primary btn-lg px-4 me-md-2" 
+            (click)="navegarPara('/marcacao-anonima')">
+            <i class="bi bi-calendar-plus me-2"></i>
+            Marcar Consulta
+          </button>
+          <button 
+            class="btn btn-outline-primary btn-lg px-4" 
+            (click)="navegarPara('/login')">
+            <i class="bi bi-person-check me-2"></i>
+            Fazer Login
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="medical-illustration">
+          <i class="bi bi-hospital text-primary" style="font-size: 15rem; opacity: 0.7;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Serviços Section -->
+<div class="services-section py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="h1 fw-bold text-dark">Nossos Serviços</h2>
+        <p class="lead text-muted">Oferecemos uma ampla gama de serviços médicos</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body text-center">
+            <i class="bi bi-heart-pulse text-danger mb-3" style="font-size: 3rem;"></i>
+            <h5 class="card-title">Medicina Geral</h5>
+            <p class="card-text">
+              Consultas de clínica geral com profissionais experientes para cuidados de saúde primários.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body text-center">
+            <i class="bi bi-heart text-primary mb-3" style="font-size: 3rem;"></i>
+            <h5 class="card-title">Cardiologia</h5>
+            <p class="card-text">
+              Especialistas em saúde cardiovascular com equipamentos modernos para diagnóstico e tratamento.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body text-center">
+            <i class="bi bi-eye text-success mb-3" style="font-size: 3rem;"></i>
+            <h5 class="card-title">Oftalmologia</h5>
+            <p class="card-text">
+              Cuidados completos para a saúde dos seus olhos, desde consultas de rotina a cirurgias especializadas.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Como Funciona Section -->
+<div class="how-it-works-section py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="h1 fw-bold text-dark">Como Funciona</h2>
+        <p class="lead text-muted">Marque suas consultas em 3 passos simples</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 text-center">
+        <div class="step-icon mb-3">
+          <span class="badge bg-primary rounded-circle p-3" style="font-size: 1.5rem;">1</span>
+        </div>
+        <h5>Escolha o Serviço</h5>
+        <p class="text-muted">
+          Selecione o tipo de consulta ou exame que necessita do nosso catálogo de serviços.
+        </p>
+      </div>
+      <div class="col-md-4 text-center">
+        <div class="step-icon mb-3">
+          <span class="badge bg-primary rounded-circle p-3" style="font-size: 1.5rem;">2</span>
+        </div>
+        <h5>Preencha os Dados</h5>
+        <p class="text-muted">
+          Complete o formulário com suas informações pessoais e preferências de horário.
+        </p>
+      </div>
+      <div class="col-md-4 text-center">
+        <div class="step-icon mb-3">
+          <span class="badge bg-primary rounded-circle p-3" style="font-size: 1.5rem;">3</span>
+        </div>
+        <h5>Confirmação</h5>
+        <p class="text-muted">
+          Receba a confirmação da sua marcação e aguarde o nosso contacto para confirmar a data.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Subsistemas Aceites -->
+<div class="subsistemas-section py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-4">
+        <h3 class="fw-bold text-dark">Subsistemas de Saúde Aceites</h3>
+        <p class="text-muted">Trabalhamos com os principais subsistemas de saúde</p>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-auto">
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          <span class="badge bg-success fs-6 px-3 py-2">SNS</span>
+          <span class="badge bg-primary fs-6 px-3 py-2">ADSE</span>
+          <span class="badge bg-info fs-6 px-3 py-2">SAMS</span>
+          <span class="badge bg-warning fs-6 px-3 py-2">Multicare</span>
+          <span class="badge bg-danger fs-6 px-3 py-2">Médis</span>
+          <span class="badge bg-dark fs-6 px-3 py-2">Particular</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer py-4 bg-dark text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h5>Clínica XPTO</h5>
+        <p class="mb-0">Cuidando da sua saúde com qualidade e dedicação.</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <p class="mb-0">
+          <i class="bi bi-telephone me-2"></i>
+          <strong>Contacto:</strong> 213 456 789
+        </p>
+        <p class="mb-0">
+          <i class="bi bi-envelope me-2"></i>
+          <strong>Email:</strong> geral@clinicaxpto.pt
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
